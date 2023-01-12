@@ -1,42 +1,29 @@
-import React from 'react'
+import React, { useEffect } from "react";
 
-const User = ({user}) => {
-    return(
-        <div>
-            <b>{user.name}: </b> <span style={{color: `${user.color}`}}>{user.type}타입</span>
-        </div>
-    );
-}
-
-const UserList = () => {
-    const users = [
-        {
-            id: 1,
-            name: "이상해씨",
-            type: "풀",
-            color: "green"
-        },
-        {
-            id: 2,
-            name: "파이리",
-            type: "불",
-            color: "red"
-        },
-        {
-            id: 3,
-            name: "꼬부기",
-            type: "물",
-            color: "blue"
-        },
-    ];
+const User = ({ user, onRemove, onToggle }) => {
+    useEffect(() => {
+        console.log(user);
+    }, []);
 
     return (
+        <div style={{ fontSize: "20px" }}>
+            <b style={{ cursor: "pointer", color: user.active ? `${user.color}` : "black" }} onClick={() => onToggle(user.id)}>
+                {user.pokename}:
+            </b>
+            <span style={{ color: `${user.color}` }}>{user.type}타입</span>
+            <button onClick={() => onRemove(user.id)}>삭제</button>
+        </div>
+    );
+};
+
+const UserList = ({ users, onRemove, onToggle }) => {
+    return (
         <>
-            {users.map((user, index)=>(
-                <User key={index} user={user} />
+            {users.map((user, index) => (
+                <User key={index} user={user} onRemove={onRemove} onToggle={onToggle} />
             ))}
         </>
-    )
-}
+    );
+};
 
-export default UserList
+export default UserList;
