@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
+// import React, { useEffect } from "react";
 
 const User = ({ user, onRemove, onToggle }) => {
-    useEffect(() => {
-        console.log(user);
-    }, []);
+    // useEffect(() => {
+    //     console.log(user);
+    // }, [user]);
 
     return (
         <div style={{ fontSize: "20px" }}>
