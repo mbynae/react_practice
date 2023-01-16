@@ -1,3 +1,5 @@
+//useReducer에서 커스텀훅을 사용한 방식. useInputs는 useState, useInputs2는 useReducer
+
 import React, { useRef, useReducer, useMemo, useCallback } from "react";
 // import InputSample from "./InputSample";
 import CreateUser from "./CreateUser";

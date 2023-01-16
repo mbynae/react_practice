@@ -1,3 +1,5 @@
+//useState를 활용한 방식
+
 import React, { useRef, useState, useMemo, useCallback } from "react";
 // import InputSample from "./InputSample";
 import CreateUser from "./CreateUser";

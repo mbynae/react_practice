@@ -1,3 +1,5 @@
+//useReducer를 사용한 방식
+
 import React, { useRef, useReducer, useMemo, useCallback } from "react";
 // import InputSample from "./InputSample";
 import CreateUser from "./CreateUser";
