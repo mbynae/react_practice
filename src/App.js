@@ -1,12 +1,11 @@
-import React, { useRef, useState, useMemo } from "react";
+import React, { useRef, useState, useMemo, useCallback } from "react";
 // import InputSample from "./InputSample";
 import CreateUser from "./CreateUser";
 import UserList from "./UserList";
 
-
-function countActiveUsers(users){
+function countActiveUsers(users) {
     console.log("활성 사용자 수를 세는 중...");
-    return users.filter((user)=>(user.active)).length;
+    return users.filter((user) => user.active).length;
 }
 
 function App() {
@@ -18,14 +17,14 @@ function App() {
 
     const { pokename, type, color } = inputs;
 
-    const onChange = (e) => {
+    const onChange = useCallback((e) => {
         const { name, value } = e.target;
 
-        setInputs({
+        setInputs((inputs) => ({
             ...inputs,
             [name]: value,
-        });
-    };
+        }));
+    }, []);
 
     const [users, setUsers] = useState([
         {
@@ -54,7 +53,7 @@ function App() {
     const nextId = useRef(4); //Ref 객체는 const로 선언해도 값이 바뀔 수 있음
     const nameFocus = useRef();
 
-    const onCreate = () => {
+    const onCreate = useCallback(() => {
         const user = {
             id: nextId.current,
             pokename,
@@ -63,8 +62,9 @@ function App() {
         };
 
         setUsers(
-            //[...users, user] // 배열이기 때문에 아래랑 다르게 []를 넣어야됨. 배열 또한 불변성을 지켜야 하기 때문에 원본 배열을 복사해준다.
-            users.concat(user) // 다른 방법으로 concat 메서드를 사용해서 새 배열을 복사해 추가하는 방법이 있다.
+            (users) =>
+                //[...users, user] // 배열이기 때문에 아래랑 다르게 []를 넣어야됨. 배열 또한 불변성을 지켜야 하기 때문에 원본 배열을 복사해준다.
+                users.concat(user) // 다른 방법으로 concat 메서드를 사용해서 새 배열을 복사해 추가하는 방법이 있다.
         );
 
         setInputs({
@@ -74,17 +74,19 @@ function App() {
         });
         nextId.current += 1;
         nameFocus.current.focus();
-    };
+    }, [pokename, type, color]);
 
-    const onRemove = (id) => {
-        setUsers(users.filter((user) => user.id !== id));
-    };
+    const onRemove = useCallback((id) => {
+        console.log("제거실행");
+        setUsers((users) => users.filter((user) => user.id !== id));
+    }, []);
 
-    const onToggle = (id) => {
-        setUsers(users.map((user) => (user.id === id ? { ...user, active: !user.active } : user)));
-    };
+    const onToggle = useCallback((id) => {
+        console.log("토글실행");
+        setUsers((users) => users.map((user) => (user.id === id ? { ...user, active: !user.active } : user)));
+    }, []);
 
-    const count = useMemo(()=>countActiveUsers(users), [users]);
+    const count = useMemo(() => countActiveUsers(users), [users]);
 
     return (
         <>

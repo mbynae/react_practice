@@ -11,4 +11,4 @@ const CreateUser = ({ pokename, type, color, onChange, onCreate, nameFocus }) =>
     );
 };
 
-export default CreateUser;
+export default React.memo(CreateUser);
