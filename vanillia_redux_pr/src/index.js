@@ -1,38 +1,33 @@
-import {legacy_createStore} from 'redux';
+import { legacy_createStore } from '@reduxjs/toolkit';
 
-const add = document.getElementById("add");
-const minus = document.getElementById("minus");
-const number = document.querySelector("span");
+const form = document.querySelector('form');
+const input = document.querySelector('input');
+const ul = document.querySelector('ul');
 
-number.innerText = 0;
+const ADD_TO = 'ADD_TO';
+const DEL_TO = 'DEL_TO';
 
-const countModifier = (count = Number(number.innerText), action) => {
-    switch(action.type){
-        case "ADD":
-            return count+1;
-        case "MINUS":
-            return count-1;
+const reducer = (state = [], action) => {
+    switch (action.type) {
+        case ADD_TO:
+            return [];
+        case DEL_TO:
+            return [];
         default:
-            return count;
-    };
+            return state;
+    }
 };
 
-const countStore = legacy_createStore(countModifier);
+const store = legacy_createStore(reducer);
 
-const onChange = () => {
-    number.innerText = countStore.getState();
+const onSubmit = (e) => {
+    e.preventDefault();
+    const toDo = input.value;
+    input.value = '';
+    store.dispatch({
+        type: ADD_TO,
+        text: toDo,
+    });
 };
 
-countStore.subscribe(onChange);
-
-const handleAdd = ()=>{
-    countStore.dispatch({type: "ADD"});
-};
-const handleMinus = ()=>{
-    countStore.dispatch({type: "MINUS"});
-};
-
-add.addEventListener("click", handleAdd);
-minus.addEventListener("click", handleMinus);
-
-
+form.addEventListener('submit', onSubmit);
