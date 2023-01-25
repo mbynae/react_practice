@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { actionCreator } from '../store';
+import Todo from '../components/Todo';
 
-const Home = () => {
-    const [text, setText] = useState("");
+const Home = ({ todos, addTodos }) => {
+    const [text, setText] = useState('');
 
     const onChange = (e) => {
         setText(e.target.value);
@@ -9,7 +12,8 @@ const Home = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        setText("");
+        setText('');
+        addTodos(text);
     };
 
     return (
@@ -19,9 +23,23 @@ const Home = () => {
                 <input type="text" value={text} placeholder="할 일을 입력해주세요." required onChange={onChange} />
                 <button>추가</button>
             </form>
-            <ul></ul>
+            <ul>
+                {todos.map((todo) => (
+                    <Todo {...todo} key={todo.id} />
+                ))}
+            </ul>
         </>
     );
 };
 
-export default Home;
+const mapStateToProps = (state) => {
+    return { todos: state };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addTodos: (text) => dispatch(actionCreator.addTodos(text)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
