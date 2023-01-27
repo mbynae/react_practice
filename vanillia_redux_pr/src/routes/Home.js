@@ -12,8 +12,8 @@ const Home = ({ todos, addTodos }) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        setText('');
         addTodos(text);
+        setText('');
     };
 
     return (
