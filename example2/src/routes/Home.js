@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-// import { actionCreator } from '../store';
-import { add } from '../store';
-import Todo from '../components/Todo';
+import { actionCreator } from '../store';
+import Todo from '../component/Todo';
 
-const Home = ({ todos, addTodos }) => {
+const Home = ({ state, addTodos }) => {
     const [text, setText] = useState('');
 
     const onChange = (e) => {
@@ -18,29 +17,28 @@ const Home = ({ todos, addTodos }) => {
     };
 
     return (
-        <>
-            <h1>To Do</h1>
+        <div>
+            <h1>할 일 리스트</h1>
             <form onSubmit={onSubmit}>
-                <input type="text" value={text} placeholder="할 일을 입력해주세요." required onChange={onChange} />
+                <input type="text" placeholder="할말있냐?" value={text} onChange={onChange} required />
                 <button>추가</button>
             </form>
             <ul>
-                {todos.map((todo) => (
-                    <Todo {...todo} key={todo.id} />
+                {state.map((todo) => (
+                    <Todo key={todo.id} {...todo} />
                 ))}
             </ul>
-        </>
+        </div>
     );
 };
 
 const mapStateToProps = (state) => {
-    return { todos: state };
+    return { state };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        // addTodos: (text) => dispatch(actionCreator.addTodos(text)),
-        addTodos: (text) => dispatch(add(text)),
+        addTodos: (text) => dispatch(actionCreator.addTodos(text)),
     };
 };
 

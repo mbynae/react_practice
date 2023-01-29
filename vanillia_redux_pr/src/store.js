@@ -1,5 +1,4 @@
-import { legacy_createStore } from 'redux';
-import { createAction, createReducer } from '@reduxjs/toolkit';
+import { configureStore, createAction, createReducer, createSlice } from '@reduxjs/toolkit';
 
 // const ADD = 'ADD';
 // const DELETE = 'DELETE';
@@ -18,8 +17,8 @@ import { createAction, createReducer } from '@reduxjs/toolkit';
 //     };
 // };
 
-const addTodos = createAction('ADD');
-const deleteTodos = createAction('DELETE');
+// const addTodos = createAction('ADD');
+// const deleteTodos = createAction('DELETE');
 
 // const reducer = (state = [], action) => {
 //     switch (action.type) {
@@ -32,18 +31,30 @@ const deleteTodos = createAction('DELETE');
 //     }
 // };
 
-const reducer = createReducer([], {
-    [addTodos]: (state, action) => {
-        state.push({ text: action.payload, id: Date.now() });
+// const reducer = createReducer([], {
+//     [addTodos]: (state, action) => {
+//         state.push({ text: action.payload, id: Date.now() });
+//     },
+//     [deleteTodos]: (state, action) => state.filter((todo) => todo.id !== action.payload),
+// });
+
+const todos = createSlice({
+    name: 'todosReducer',
+    initialState: [],
+    reducers: {
+        add: (state, action) => {
+            state.push({ text: action.payload, id: Date.now() });
+        },
+        remove: (state, action) => state.filter((todo) => todo.id !== action.payload),
     },
-    [deleteTodos]: (state, action) => state.filter((todo) => todo.id !== action.payload),
 });
 
-const store = legacy_createStore(reducer);
+// const store = configureStore({ reducer: todos.reducer });
 
-export const actionCreator = {
-    addTodos,
-    deleteTodos,
-};
+// export const actionCreator = {
+//     addTodos,
+//     deleteTodos,
+// };
+export const { add, remove } = todos.actions;
 
-export default store;
+export default configureStore({ reducer: todos.reducer });
