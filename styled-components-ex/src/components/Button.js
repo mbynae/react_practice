@@ -51,6 +51,19 @@ const sizeStyles = css`
     `}
 `;
 
+const fullWidthStyle = css`
+    ${props =>
+        props.fullWidth &&
+        css`
+            width: 100%;
+            justify-content: center;
+            &:nth-child(n + 2) {
+                margin-left: 0 !important;
+                margin-top: 1rem;
+            }
+        `}
+`;
+
 const StyledButton = styled.button`
     /* common */
     display: inline-block;
@@ -72,11 +85,14 @@ const StyledButton = styled.button`
     & + & {
         margin-left: 1rem;
     }
+
+    /* fullButton */
+    ${fullWidthStyle}
 `;
 
-const Button = ({ children, color, size, outline, ...rest }) => {
+const Button = ({ children, color, size, outline, fullWidth, ...rest }) => {
     return (
-        <StyledButton color={color} size={size} outline={outline} {...rest}>
+        <StyledButton color={color} size={size} outline={outline} fullWidth={fullWidth} {...rest}>
             {children}
         </StyledButton>
     );
