@@ -1,96 +1,82 @@
-import React, { useState, useRef, useMemo, useCallback } from 'react';
-import CreateUser from './CreateUser';
-import UserList from './UserList';
+import React, { useEffect, useState, useRef } from 'react';
 
-const activeSearch = (pokemons) => {
-    return pokemons.filter((pokemon) => pokemon.active).length;
+const arr = [{ color: 'red' }, { color: 'blue' }, { color: 'green' }, { color: 'yellow' }, { color: 'purple' }];
+
+const Slide = ({ color }) => {
+    return <div className="slide" style={{ backgroundColor: color }}></div>;
 };
 
+// const slideAnimation = () => {
+//     const inner = document.querySelector('.inner');
+//     const slide = document.querySelectorAll('.slide');
+//     const slideClone = inner.firstElementChild.cloneNode(true);
+//     inner.appendChild(slideClone);
+//     let slideWidth = slide[0].offsetWidth;
+//     let slideCount = slide.length;
+
+//     const slideEffect = (count) => {
+//         console.log(`함수안${count}`);
+//         currentCount++;
+//         inner.style.transition = 'all 0.6s';
+//         inner.style.transform = 'translateX(-' + slideWidth * count + 'px)';
+
+//         if (count === slideCount) {
+//             setTimeout(() => {
+//                 inner.style.transition = '0s';
+//                 inner.style.transform = 'translateX(0px)';
+//             }, 700);
+//         }
+//     };
+// };
+
 const App = () => {
-    const [inputs, setInputs] = useState({
-        pokename: '',
-        type: '',
-        color: '',
-    });
-    const nextId = useRef(4);
-    const focusOn = useRef();
+    const slideInner = useRef();
+    const slideView = useRef();
+    const [count, setCount] = useState(0);
+    const [move, setMove] = useState(0);
 
-    const [pokemons, setPokemons] = useState([
-        {
-            id: 1,
-            pokename: '이상해씨',
-            type: '풀',
-            color: 'green',
-            active: true,
-        },
-        {
-            id: 2,
-            pokename: '파이리',
-            type: '불',
-            color: 'red',
-            active: false,
-        },
-        {
-            id: 3,
-            pokename: '꼬부기',
-            type: '물',
-            color: 'blue',
-            active: false,
-        },
-    ]);
+    useEffect(() => {
+        let sliderClone = document.querySelector('.inner').firstElementChild.cloneNode(true);
+        document.querySelector('.inner').appendChild(sliderClone);
+    }, []);
 
-    const onChange = useCallback(
-        (e) => {
-            const { name, value } = e.target;
-            setInputs({ ...inputs, [name]: value });
-        },
-        [inputs],
-    );
+    useEffect(() => {
+        setMove(500 * count);
+        slideInner.current.style.transition = 'all 0.6s';
+        slideInner.current.style.transform = `translateX(-${move}px)`;
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-        const { pokename, type, color } = inputs;
-        const pokemon = {
-            id: nextId.current,
-            pokename: pokename,
-            type: type,
-            color: color,
-            active: false,
-        };
+        if (count === document.querySelectorAll('.slide').length)
+            setTimeout(() => {
+                setMove(0);
+                slideInner.current.style.transition = '0s';
+                slideInner.current.style.transform = `translatX(0px)`;
+            }, 700);
+    }, [count]);
 
-        setPokemons([...pokemons, pokemon]);
-        setInputs({
-            pokename: '',
-            type: '',
-            color: '',
-        });
+    useEffect(() => {
+        const ce = setInterval(() => {
+            count <= 4 ? setCount((count) => count + 1) : setCount(0);
+        }, 2000);
 
-        nextId.current++;
-        focusOn.current.focus();
-    };
-
-    const onRemove = useCallback(
-        (id) => {
-            setPokemons(pokemons.filter((pokemon) => pokemon.id !== id));
-        },
-        [pokemons],
-    );
-
-    const onToggle = useCallback(
-        (id) => {
-            setPokemons(pokemons.map((pokemon) => (pokemon.id === id ? { ...pokemon, active: !pokemon.active } : pokemon)));
-        },
-        [pokemons],
-    );
-
-    const count = useMemo(() => activeSearch(pokemons), [pokemons]);
+        return () => clearInterval(ce);
+    }, [count <= 4]);
+    console.log(count);
 
     return (
-        <>
-            <CreateUser {...inputs} onChange={onChange} onSubmit={onSubmit} focusOn={focusOn} />
-            <UserList pokemons={pokemons} onRemove={onRemove} onToggle={onToggle} />
-            <div>활성화된 이름 수: {count}</div>
-        </>
+        <div className="wrap">
+            <div className="view" ref={slideView}>
+                <div className="inner" ref={slideInner}>
+                    {/* <div className="slide"></div>
+                    <div className="slide"></div>
+                    <div className="slide"></div>
+                    <div className="slide"></div>
+                    <div className="slide"></div> */}
+                    {arr.map((color, index) => (
+                        <Slide key={index} color={color.color} />
+                    ))}
+                </div>
+            </div>
+        </div>
     );
 };
 
