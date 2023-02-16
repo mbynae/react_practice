@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
+import useInterval from './useInterval';
 
 const arr = [{ color: 'red' }, { color: 'blue' }, { color: 'green' }, { color: 'yellow' }, { color: 'purple' }];
 
@@ -40,27 +41,43 @@ const App = () => {
         document.querySelector('.inner').appendChild(sliderClone);
     }, []);
 
-    useEffect(() => {
-        setMove(500 * count);
-        slideInner.current.style.transition = 'all 0.6s';
-        slideInner.current.style.transform = `translateX(-${move}px)`;
+    // useEffect(() => {
+    //     setMove(500 * count);
+    //     slideInner.current.style.transition = 'all 0.6s';
+    //     slideInner.current.style.transform = `translateX(-${move}px)`;
 
-        if (count === document.querySelectorAll('.slide').length)
+    //     if (count === document.querySelectorAll('.slide').length)
+    //         setTimeout(() => {
+    //             setMove(0);
+    //             slideInner.current.style.transition = '0s';
+    //             slideInner.current.style.transform = `translatX(0px)`;
+    //         }, 700);
+    // }, [count]);
+
+    // useEffect(() => {
+    //     const ce = setInterval(() => {
+    //         count <= 4 ? setCount((count) => count + 1) : setCount(0);
+    //     }, 2000);
+
+    //     return () => clearInterval(ce);
+    // }, [count <= 4]);
+    // console.log(count);
+
+    useInterval(() => {
+        if (count < 7) {
+            setMove(500 * count);
+            setCount(count + 1);
+            slideInner.current.style.transition = 'all 0.6s';
+            slideInner.current.style.transform = `translateX(-${move}px)`;
+        } else {
             setTimeout(() => {
                 setMove(0);
-                slideInner.current.style.transition = '0s';
-                slideInner.current.style.transform = `translatX(0px)`;
-            }, 700);
-    }, [count]);
-
-    useEffect(() => {
-        const ce = setInterval(() => {
-            count <= 4 ? setCount((count) => count + 1) : setCount(0);
-        }, 2000);
-
-        return () => clearInterval(ce);
-    }, [count <= 4]);
-    console.log(count);
+                setCount(0);
+                slideInner.current.style.transition = 'all 0s';
+                slideInner.current.style.transform = `translateX(0px)`;
+            }, 100);
+        }
+    }, 1000);
 
     return (
         <div className="wrap">
