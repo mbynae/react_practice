@@ -1,32 +1,27 @@
-li {
-    list-style-type: none;
+* {
+    margin: 0;
+    top: 0;
+    box-sizing: border-box;
 }
-button {
-    cursor: pointer;
+.wrap {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
-#create {
-    margin-bottom: 10px;
+.view {
+    width: 500px;
+    height: 500px;
+    background-color: #666; 
+    overflow: hidden;
 }
-#create > input:nth-child(3) {
-    margin-right: 5px;
+.inner {
+    width: 600%;
+    height: 100%;
+    display: flex;
 }
-.pokeList {
-    font-size: 20px;
+.slide {
+    width: 500px;
+    height: 500px;
 }
-.pokeList li {
-    margin-bottom: 10px;
-}
-.pokeList li span {
-    margin-right: 5px;
-}
-.pokeList li button {
-    border: 1px solid #666;
-    background-color: inherit;
-    padding: 2px 8px;
-    border-radius: 6px;
-    transform: translateY(-2px);
-    font-size: 14px;
-}
-
-
